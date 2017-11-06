@@ -38,5 +38,11 @@
     "webpack": "^3.5.5",
     "webpack-stream": "^4.0.0",
     "yargs": "^8.0.2"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "cookie-parser": "^1.4.3",
+    "morgan": "^1.9.0",
+    "serve-favicon": "^2.4.5"
   }
 }
