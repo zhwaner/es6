@@ -87,8 +87,8 @@ __webpack_require__(2);
 
 
 {
-  var regex = new RegExp('xyx', 'i');
-  console.log(regex.flags);
+  var p = document.querySelectorAll('p');
+  console.log(Array.from(p));
 }
 
 /***/ })
