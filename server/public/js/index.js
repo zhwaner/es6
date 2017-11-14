@@ -9212,6 +9212,10 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -9376,10 +9380,203 @@
 	      $cur.toggleClass('btn-boll-active');
 	      self.getCount();
 	    }
+
+	    /*
+	     * {toggleCodeActive 切换玩法}
+	     * @param {type} e {description}
+	     * @return {type}  {description}
+	     * */
+
+	  }, {
+	    key: 'changePlayNav',
+	    value: function changePlayNav(e) {
+	      var self = this;
+	      var $cur = (0, _jquery2.default)(e.currentTarget);
+	      $cur.addClass('active').siblings().removeClass('active');
+	      self.cur_play = $cur.attr('desc').toLocaleLowerCase();
+	      (0, _jquery2.default)('#zx_sm span').html(self.play_list.get(self.cur_play).tip);
+	      (0, _jquery2.default)('.boll-list .btn-boll').removeClass('btn-boll-active');
+	      self.getCount();
+	    }
+
+	    /*
+	     * {toggleCodeActive 操作区}
+	     * @param {type} e {description}
+	     * @return {type}  {description}
+	     * */
+
+	  }, {
+	    key: 'assistHandle',
+	    value: function assistHandle(e) {
+	      e.preventDefault();
+	      var self = this;
+	      var $cur = (0, _jquery2.default)(e.currentTarget);
+	      var index = $cur.index();
+	      (0, _jquery2.default)('.boll-list .btn-boll').removeClass('btn-boll-active');
+	      if (index === 0) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').addClass('btn-boll-active');
+	      }
+	      if (index === 1) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').each(function (i, t) {
+	          if (t.textContent - 5 > 0) {
+	            (0, _jquery2.default)(t).addClass('btn-boll-active');
+	          }
+	        });
+	      }
+	      if (index === 2) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').each(function (i, t) {
+	          if (t.textContent - 6 < 0) {
+	            (0, _jquery2.default)(t).addClass('btn-boll-active');
+	          }
+	        });
+	      }
+	      if (index === 3) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').each(function (i, t) {
+	          if (t.textContent % 2 == 1) {
+	            (0, _jquery2.default)(t).addClass('btn-boll-active');
+	          }
+	        });
+	      }
+	      if (index === 4) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').each(function (i, t) {
+	          if (t.textContent % 2 == 0) {
+	            (0, _jquery2.default)(t).addClass('btn-boll-active');
+	          }
+	        });
+	      }
+	      self.getCount();
+	    }
+
+	    /*
+	     * {getName 获取当前彩票名称}
+	     * @param {type} e {description}
+	     * @return {type}  {description}
+	     * */
+
+	  }, {
+	    key: 'getName',
+	    value: function getName() {
+	      return this.name;
+	    }
+
+	    /*
+	     * {addCode 添加号码}
+	     * */
+
+	  }, {
+	    key: 'addCode',
+	    value: function addCode() {
+	      var self = this;
+	      var $active = (0, _jquery2.default)('.boll-list .btn-boll-active').text().match(/\d{2}/g);
+	      var active = $active ? $active.length : 0;
+	      var count = self.computeCount(active, self.cur_play);
+	      if (count) {
+	        self.addCodeItem($active.join(''), self.cur_play, self.play_list.get(self.cur_play).name, count);
+	      }
+	    }
+
+	    /**
+	     * [addCodeItem 添加单次号码]
+	     * @param {[type]} code     [description]
+	     * @param {[type]} type     [description]
+	     * @param {[type]} typeName [description]
+	     * @param {[type]} count    [description]
+	     */
+
+	  }, {
+	    key: 'addCodeItem',
+	    value: function addCodeItem(code, type, typeName, count) {
+	      var self = this;
+	      var tpl = '\n    <li codes="' + type + '|' + code + '" bonus="' + count * 2 + '" count="' + count + '">\n     <div class="code">\n       <b>' + typeName + (count > 1 ? '复式' : '单式') + '</b>\n       <b class="em">' + code + '</b>\n       [' + count + '\u6CE8,<em class="code-list-money">' + count * 2 + '</em>\u5143]\n     </div>\n   </li>\n    ';
+	      (0, _jquery2.default)(self.cart_el).append(tpl);
+	      self.getTotal();
+	    }
+	  }, {
+	    key: 'getCount',
+	    value: function getCount() {
+	      var self = this;
+	      var active = (0, _jquery2.default)('.boll-list .btn-boll-active').length;
+	      var count = self.computeCount(active, self.cur_play);
+	      var range = self.computeBonus(active, self.cur_play);
+	      var money = count * 2;
+	      var win1 = range[0] - money;
+	      var win2 = range[1] - money;
+	      var tpl = void 0;
+	      var c1 = win1 < 0 && win2 < 0 ? Math.abs(win1) : win1;
+	      var c2 = win1 < 0 && win2 < 0 ? Math.abs(win2) : win2;
+	      if (count === 0) {
+	        tpl = '\u60A8\u9009\u4E86 <b class="red">' + count + '</b> \u6CE8\uFF0C\u5171 <b class="red">' + count * 2 + '</b> \u5143';
+	      } else if (range[0] === range[1]) {
+	        tpl = '\u60A8\u9009\u4E86 <b>' + count + '</b> \u6CE8\uFF0C\u5171 <b>' + count * 2 + '</b> \u5143  <em>\u82E5\u4E2D\u5956\uFF0C\u5956\u91D1\uFF1A\n      <strong class="red">' + range[0] + '</strong> \u5143\uFF0C\n      \u60A8\u5C06' + (win1 >= 0 ? '盈利' : '亏损') + '\n      <strong class="' + (win1 >= 0 ? 'red' : 'green') + '">' + Math.abs(win1) + ' </strong> \u5143</em>';
+	      } else {
+	        tpl = '\u60A8\u9009\u4E86 <b>' + count + '</b> \u6CE8\uFF0C\u5171 <b>' + count * 2 + '</b> \u5143  <em>\u82E5\u4E2D\u5956\uFF0C\u5956\u91D1\uFF1A\n      <strong class="red">' + range[0] + '</strong> \u81F3 <strong class="red">' + range[1] + '</strong> \u5143\uFF0C\n      \u60A8\u5C06' + (win1 < 0 && win2 < 0 ? '亏损' : '盈利') + '\n      <strong class="' + (win1 >= 0 ? 'red' : 'green') + '">' + c1 + ' </strong>\n      \u81F3 <strong class="' + (win2 >= 0 ? 'red' : 'green') + '"> ' + c2 + ' </strong>\n      \u5143</em>';
+	      }
+	      (0, _jquery2.default)('.sel_info').html(tpl);
+	    }
+
+	    /**
+	     * [getTotal 计算所有金额]
+	     * @return {[type]} [description]
+	     */
+
+	  }, {
+	    key: 'getTotal',
+	    value: function getTotal() {
+	      var count = 0;
+	      (0, _jquery2.default)('.codelist li').each(function (index, item) {
+	        count += (0, _jquery2.default)(item).attr('count') * 1;
+	      });
+	      (0, _jquery2.default)('#count').text(count);
+	      (0, _jquery2.default)('#money').text(count * 2);
+	    }
+
+	    /**
+	     * [getRandom 生成随机数]
+	     * @param  {[type]} num [description]
+	     * @return {[type]}     [description]
+	     */
+
+	  }, {
+	    key: 'getRandom',
+	    value: function getRandom(num) {
+	      var arr = [],
+	          index = void 0;
+	      var number = Array.from(this.number); // 将类数组转换为数组
+	      while (num--) {
+	        index = Number.parseInt(Math.random() * number.length);
+	        arr.push(number[index]);
+	        number.splice(index, 1);
+	      }
+	      return arr.join(' ');
+	    }
+
+	    /**
+	     * [getRandomCode 添加随机号码]
+	     * @param  {[type]} e [description]
+	     * @return {[type]}   [description]
+	     */
+
+	  }, {
+	    key: 'getRandomCode',
+	    value: function getRandomCode(e) {
+	      e.preventDefault();
+	      var num = e.currentTarget.getAttribute('count');
+	      var play = this.cur_play.match(/\d+/g)[0];
+	      var self = this;
+	      if (num === '0') {
+	        (0, _jquery2.default)(self.cart_el).html('');
+	      } else {
+	        for (var i = 0; i < num; i++) {
+	          self.addCodeItem(self.getRandom(play), self.cur_play, self.play_list.get(self.cur_play).name, 1);
+	        }
+	      }
+	    }
 	  }]);
 
 	  return Base;
 	}();
+
+	exports.default = Base;
 
 /***/ }),
 /* 330 */
