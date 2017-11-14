@@ -47,6 +47,49 @@ class Base {
    * @return {type} {description}
    * */
   initNumber () {
+    for (let i = 0; i < 12; i++) {
+      this.number.add(('' + i).padStart(2, '0')) // 1-9前面添加0
+    }
+  }
 
+  /*
+   * {setOmit 设置遗漏数据:十分钟更新一次}
+   * @return {type} omit {description}
+   * */
+  setOmit () {
+    let self = this
+    self.omit.clear()
+    for (let [index, item] of omit.entries()) {
+      self.omit.set(index, item)
+    }
+    $(self.omit_el).each(function (index, item) {
+      $(item).text(self.omit.get(index))
+    })
+  }
+
+  /*
+   * {setOpenCode 设置开奖}
+   * @return {type} code {description}
+   * */
+  setOpenCode (code) {
+    let self = this
+    self.open_code.clear()
+    // Map和Set数据结构的不同，替代数组的优势
+    for (let item of code.values()) {
+      self.open_code.add(item)
+    }
+    self.updateOpenCode && self.updateOpenCode.call(self, code)
+  }
+
+  /*
+   * {toggleCodeActive 号码选中取消}
+   * @param {type} e {description}
+   * @return {type}  {description}
+   * */
+  toggleCodeActive (e) {
+    let self = this
+    let $cur = $(e.currentTarget)
+    $cur.toggleClass('btn-boll-active')
+    self.getCount()
   }
 }
