@@ -61,6 +61,21 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// import './class/lesson1.js'
+	// class Test{
+	//   constructor(){
+	//     this.a="hello world"
+	//   }
+	// }
+	//
+	// let test = new Test()
+	//
+	// document.body.innerHTML = test.a
+
+	var syy = new _lottery2.default();
+
+	console.log(syy);
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -9473,7 +9488,7 @@
 
 	  }, {
 	    key: 'setOmit',
-	    value: function setOmit() {
+	    value: function setOmit(omit) {
 	      var self = this;
 	      self.omit.clear();
 	      var _iteratorNormalCompletion = true;
@@ -9518,7 +9533,6 @@
 	    value: function setOpenCode(code) {
 	      var self = this;
 	      self.open_code.clear();
-	      // Map和Set数据结构的不同，替代数组的优势
 	      var _iteratorNormalCompletion2 = true;
 	      var _didIteratorError2 = false;
 	      var _iteratorError2 = undefined;
@@ -9652,7 +9666,7 @@
 	      var active = $active ? $active.length : 0;
 	      var count = self.computeCount(active, self.cur_play);
 	      if (count) {
-	        self.addCodeItem($active.join(''), self.cur_play, self.play_list.get(self.cur_play).name, count);
+	        self.addCodeItem($active.join(' '), self.cur_play, self.play_list.get(self.cur_play).name, count);
 	      }
 	    }
 
@@ -19627,7 +19641,7 @@
 	      var arr = new Array(active).fill('0');
 	      if (exist && play_name.at(0) === 'r') {
 	        // 直接用类名来调用而不是对象，说明combine是静态方法
-	        count = Calculate.combine(arr, play_name.split('')[1]);
+	        count = Calculate.combine(arr, play_name.split('')[1]).length;
 	      }
 	      return count;
 	    }
@@ -19746,7 +19760,6 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	// 接口请求相关的方法
 	var Interface = function () {
 	  function Interface() {
 	    _classCallCheck(this, Interface);
@@ -19755,24 +19768,22 @@
 	  _createClass(Interface, [{
 	    key: 'getOmit',
 
-	    /*
-	     * {getOmit 获取遗漏数据}
-	     * @param {string} issue 当前期号
-	     * @return {type} description
-	     * */
-	    // 这里避免回调的两个操作
+	    /**
+	     * [getOmit 获取遗漏数据]
+	     * @param  {string} issue [当前期号]
+	     * @return {[type]}       [description]
+	     */
 	    value: function getOmit(issue) {
-	      // 通过这个方法返回一个Promise对象提供.then方法被外部其他对象使用
 	      var self = this;
 	      return new Promise(function (resolve, reject) {
 	        _jquery2.default.ajax({
-	          url: 'get/omit',
+	          url: '/get/omit',
 	          data: {
 	            issue: issue
 	          },
 	          dataType: 'json',
 	          success: function success(res) {
-	            self.setOmit(res.data); // 通过内部调用其他方法返回接口请求的数据，达到数据共享
+	            self.setOmit(res.data);
 	            resolve.call(self, res);
 	          },
 	          error: function error(err) {
@@ -19781,25 +19792,25 @@
 	        });
 	      });
 	    }
-	    /*
-	     * {getOpenCode 获取开奖号码}
-	     * @param {string} issue 当前期号
-	     * @return {type} description
-	     * */
+	    /**
+	     * [getOpenCode 获取开奖号码]
+	     * @param  {string} issue [期号]
+	     * @return {[type]}       [description]
+	     */
 
 	  }, {
 	    key: 'getOpenCode',
 	    value: function getOpenCode(issue) {
 	      var self = this;
-	      return new Promise(function (resolve, reject) {
+	      return new Promise(function (resolve, rejet) {
 	        _jquery2.default.ajax({
-	          url: 'get/opencode',
+	          url: '/get/opencode',
 	          data: {
 	            issue: issue
 	          },
 	          dataType: 'json',
 	          success: function success(res) {
-	            self.setOpencode(res.data);
+	            self.setOpenCode(res.data);
 	            resolve.call(self, res);
 	          },
 	          error: function error(err) {
@@ -19808,19 +19819,20 @@
 	        });
 	      });
 	    }
-	    /*
-	     * {getState 获取当前状态}
-	     * @param {string} issue 当前期号
-	     * @return {type} description
-	     * */
+
+	    /**
+	     * [getState 获取当前状态]
+	     * @param  {string} issue [当前期号]
+	     * @return {[type]}       [description]
+	     */
 
 	  }, {
 	    key: 'getState',
 	    value: function getState(issue) {
 	      var self = this;
-	      return new Promise(function (resolve, reject) {
+	      return new Promise(function (resolve, rejet) {
 	        _jquery2.default.ajax({
-	          url: 'get/state',
+	          url: '/get/state',
 	          data: {
 	            issue: issue
 	          },

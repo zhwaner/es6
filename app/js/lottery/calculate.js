@@ -11,7 +11,7 @@ class Calculate {
     const arr = new Array(active).fill('0')
     if (exist && play_name.at(0) === 'r') {
       // 直接用类名来调用而不是对象，说明combine是静态方法
-      count = Calculate.combine(arr, play_name.split('')[1])
+      count = Calculate.combine(arr, play_name.split('')[1]).length
     }
     return count
   }

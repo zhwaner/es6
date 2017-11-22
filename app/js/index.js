@@ -9,5 +9,9 @@
 //
 // document.body.innerHTML = test.a
 
-import 'babel-polyfill';
-import Lottery from './lottery';
+import 'babel-polyfill'
+import Lottery from './lottery'
+
+const syy = new Lottery()
+
+console.log(syy)

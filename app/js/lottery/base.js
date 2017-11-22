@@ -56,7 +56,7 @@ class Base {
    * {setOmit 设置遗漏数据:十分钟更新一次}
    * @return {type} omit {description}
    * */
-  setOmit () {
+  setOmit (omit) {
     let self = this
     self.omit.clear()
     for (let [index, item] of omit.entries()) {
@@ -74,7 +74,6 @@ class Base {
   setOpenCode (code) {
     let self = this
     self.open_code.clear()
-    // Map和Set数据结构的不同，替代数组的优势
     for (let item of code.values()) {
       self.open_code.add(item)
     }
@@ -171,7 +170,7 @@ class Base {
     let active = $active ? $active.length : 0
     let count = self.computeCount(active, self.cur_play)
     if (count) {
-      self.addCodeItem($active.join(''), self.cur_play, self.play_list.get(self.cur_play).name, count)
+      self.addCodeItem($active.join(' '), self.cur_play, self.play_list.get(self.cur_play).name, count)
     }
   }
 
